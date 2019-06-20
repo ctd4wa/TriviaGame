@@ -41,8 +41,6 @@ $(document).ready(function(){
         showQuestion();
         startTimer();
         
-            
-        }
     })
 })
 // start with Start Button page
