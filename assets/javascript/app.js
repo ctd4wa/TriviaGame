@@ -33,6 +33,7 @@ $(document).ready(function(){
     var intervalId;
     var QuestionCount = qna.length;
     var choice;
+    var running = false;
 
 
 
@@ -40,8 +41,25 @@ $(document).ready(function(){
         $("#start").hide();
         showQuestion();
         startTimer();
-        
-    })
+    });
+
+    function startTimer() {
+        if (!running) {
+            intervalId = setInterval(decrement, 1000);
+            running = true;
+        }
+    }
+
+    function decrement() {
+        timer --;
+        $("#timeleft").text("<h3>You have " + timer + "seconds left!!</h3>");
+            if (timer == 0) {
+                blankCount++;
+                stop();
+                $("#responseblock").text("<h5>Ruh roh! Time's up! The answer is:" + 
+            }
+
+    }
 })
 // start with Start Button page
 // when Start is clicked, questions&answers appear and timer begins
