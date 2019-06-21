@@ -56,14 +56,13 @@ $(document).ready(function(){
     }
 
     function decrement() {
-        timer --;
-        $("#timeleft").html("<h3> You have " + timer + "seconds left!! </h3>");
+        $("#timeleft").html("<h3> You have " + timer + " seconds left!! </h3>");
         timer --;
 
             if (timer == 0) {
                 blankCount++;
                 stop();
-                $("#answerblock").text("<p>Ruh roh! Time's up! The answer is:" + pick.choice[pick.answer] + "</p>");
+                $("#answerblock").html("<p>Ruh roh! Time's up! The answer is:" + pick.choice[pick.answer] + "</p>");
                 hidepicture();
             }
 
@@ -95,13 +94,13 @@ $(document).ready(function(){
                 stop();
                 correctCount++;
                 userGuess="";
-                $("#answerblock").html("<p>Well done!</p>");
+                $("#answerblock").html("<p> Well done! </p>");
                 hidepicture();
             } else {
                 stop();
                 incorrectCount++;
                 userGuess="";
-                $("#answerblock").html("<p>Nope! The right answer is: " + pick.choice[pick.answer] + "</p>");
+                $("#answerblock").html("<p> Nope! The right answer is: " + pick.choice[pick.answer] + " </p>");
                 hidepicture();
             }
     })
@@ -119,8 +118,11 @@ $(document).ready(function(){
             $("#answerblock").append("<h4> Correct: " + correctCount + "</h4>");
             $("#answerblock").append("<h4> Incorrect: " + incorrectCount + "</h4>");
             $("#answerblock").append("<h4> Left Blank: " + blankCount + "</h4>");
+        } else {
+            startTimer();
+            showQuestion();
         }
-        })
+        }, 3000);
     }
 })
 // start with Start Button page
