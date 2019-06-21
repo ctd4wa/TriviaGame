@@ -32,7 +32,7 @@ $(document).ready(function(){
     var userGuess = "";
     var intervalId;
     var QuestionCount = qna.length;
-    var choice;
+    var pick;
     var running = false;
 
 
@@ -56,7 +56,7 @@ $(document).ready(function(){
             if (timer == 0) {
                 blankCount++;
                 stop();
-                $("#responseblock").text("<h5>Ruh roh! Time's up! The answer is:" + 
+                $("#responseblock").text("<p>Ruh roh! Time's up! The answer is:" + pick.choice[pick.answer] + "</p>")
             }
 
     }
