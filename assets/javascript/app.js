@@ -40,7 +40,7 @@ $(document).ready(function(){
     var correctCount = 0;
     var incorrectCount = 0;
     var blankCount = 0;
-var timer = 20;
+var timer = 15;
 var intervalId;
 var userGuess ="";
 var running = false;
@@ -53,7 +53,7 @@ var holder = [];
 
 
 $("#reset").hide();
-//click start button to start game
+//Starts game
 $("#start").on("click", function () {
 		$("#start").hide();
 		displayQuestion();
@@ -62,19 +62,19 @@ $("#start").on("click", function () {
 	holder.push(qna[i]);
 }
 	})
-//timer start
+//Starts timer
 function runTimer(){
 	if (!running) {
 	intervalId = setInterval(decrement, 1000); 
 	running = true;
 	}
 }
-//timer countdown
+//Decrement function
 function decrement() {
 	$("#timeleft").html("<h3>Time remaining: " + timer + "</h3>");
 	timer --;
 
-	//stop timer if reach 0
+	//When the question is left blank
 	if (timer === 0) {
 		blankCount++;
 		stop();
@@ -83,43 +83,35 @@ function decrement() {
 	}	
 }
 
-//timer stop
+//Stop Function
 function stop() {
 	running = false;
 	clearInterval(intervalId);
 }
-//randomly pick question in array if not already shown
-//display question and loop though and display possible answers
+
+//display random question in the array and loop though and display possible answers
 function displayQuestion() {
-	//generate random index in array
 	index = Math.floor(Math.random()*qna.length);
 	pick = qna[index];
 
-//	if (pick.shown) {
-//		//recursive to continue to generate new index until one is chosen that has not shown in this game yet
-//		displayQuestion();
-//	} else {
-//		console.log(pick.question);
-		//iterate through answer array and display
+		//iterating through question choices
 		$("#questionblock").html("<h2>" + pick.question + "</h2>");
 		for(var i = 0; i < pick.choice.length; i++) {
 			var userChoice = $("<div>");
 			userChoice.addClass("answerchoice");
 			userChoice.html(pick.choice[i]);
-			//assign array position to it so can check answer
 			userChoice.attr("data-guessvalue", i);
 			$("#answerblock").append(userChoice);
-//		}
 }
 
 
 
-//click function to select answer and outcomes
+//Selecting Answers
 $(".answerchoice").on("click", function () {
-	//grab array position from userGuess
+	
 	userGuess = parseInt($(this).attr("data-guessvalue"));
 
-	//correct guess or wrong guess outcomes
+	
 	if (userGuess === pick.answer) {
 		stop();
 		correctCount++;
@@ -145,7 +137,7 @@ function hidepicture () {
 
 	var hidpic = setTimeout(function() {
 		$("#answerblock").empty();
-		timer= 20;
+		timer= 15;
 
 	//run the score screen if all questions answered
 	if ((incorrectCount + correctCount + blankCount) === qCount) {
@@ -182,10 +174,3 @@ $("#reset").on("click", function() {
 })
 
 })
-// start with Start Button page
-// when Start is clicked, questions&answers appear and timer begins
-// How do you have an individual container for the Start button and then hide it to begin the game?
-// Once Start is clicked, the game begins and the timer runs.
-// Show timer and set it to 30 seconds to decrease
-// x many questions, with answers in the format of radio buttons(html input or bootstrap button ids)
-//
