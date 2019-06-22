@@ -40,102 +40,147 @@ $(document).ready(function(){
     var correctCount = 0;
     var incorrectCount = 0;
     var blankCount = 0;
-    var timer = 15;
-    var userGuess = "";
-    var intervalId;
-    var QuestionCount = qna.length;
-    var pick;
-    var running = false;
-    var holder = [];
-    var choiceArray = [];
+var timer = 20;
+var intervalId;
+var userGuess ="";
+var running = false;
+var qCount = qna.length;
+var pick;
+var index;
+var newArray = [];
+var holder = [];
 
 
 
-    $("#start").on("click", function(){
-        $("#start").hide();
-        showQuestion();
-        startTimer();
-        for(var i = 0; i < qna.length; i++) {
-            holder.push(qna[i]);
-        }
-    });
+$("#reset").hide();
+//click start button to start game
+$("#start").on("click", function () {
+		$("#start").hide();
+		displayQuestion();
+		runTimer();
+		for(var i = 0; i < qna.length; i++) {
+	holder.push(qna[i]);
+}
+	})
+//timer start
+function runTimer(){
+	if (!running) {
+	intervalId = setInterval(decrement, 1000); 
+	running = true;
+	}
+}
+//timer countdown
+function decrement() {
+	$("#timeleft").html("<h3>Time remaining: " + timer + "</h3>");
+	timer --;
 
-    function startTimer() {
-        if (!running) {
-            intervalId = setInterval(decrement, 1000);
-            running = true;
-        }
-    }
+	//stop timer if reach 0
+	if (timer === 0) {
+		blankCount++;
+		stop();
+		$("#answerblock").html("<p>Time is up! The correct answer is: " + pick.choice[pick.answer] + "</p>");
+		hidepicture();
+	}	
+}
 
-    function decrement() {
-        $("#timeleft").html("<h3> You have " + timer + " seconds left!! </h3>");
-        timer --;
+//timer stop
+function stop() {
+	running = false;
+	clearInterval(intervalId);
+}
+//randomly pick question in array if not already shown
+//display question and loop though and display possible answers
+function displayQuestion() {
+	//generate random index in array
+	index = Math.floor(Math.random()*qna.length);
+	pick = qna[index];
 
-            if (timer === 0) {
-                blankCount++;
-                stop();
-                $("#answerblock").html("<p>Ruh roh! Time's up! The answer is: " + pick.choice[pick.answer] + "</p>");
-                hidepicture();
-            }
+//	if (pick.shown) {
+//		//recursive to continue to generate new index until one is chosen that has not shown in this game yet
+//		displayQuestion();
+//	} else {
+//		console.log(pick.question);
+		//iterate through answer array and display
+		$("#questionblock").html("<h2>" + pick.question + "</h2>");
+		for(var i = 0; i < pick.choice.length; i++) {
+			var userChoice = $("<div>");
+			userChoice.addClass("answerchoice");
+			userChoice.html(pick.choice[i]);
+			//assign array position to it so can check answer
+			userChoice.attr("data-guessvalue", i);
+			$("#answerblock").append(userChoice);
+//		}
+}
 
-    }
 
-    function stop() {
-        running = false;
-        clearInterval(intervalId);
-    }
 
-    // displays question in a random array and displays multiple choices for each
-    function showQuestion() {
-        index = Math.floor(Math.random()*qna.length);
-        pick = qna[index];
+//click function to select answer and outcomes
+$(".answerchoice").on("click", function () {
+	//grab array position from userGuess
+	userGuess = parseInt($(this).attr("data-guessvalue"));
 
-        $("#questionblock").html("<h2>" + pick.question + "</h2>");
-        for (let i = 0; i < pick.choice.length; i++) {
-            var userChoice = $("<div>");
-            userChoice.addClass("answerchoice");
-            userChoice.html(pick.choice[i]);
-            userChoice.attr("guessvalue", i);
-            $("#answerblock").append(userChoice);    
-        }
-    }
+	//correct guess or wrong guess outcomes
+	if (userGuess === pick.answer) {
+		stop();
+		correctCount++;
+		userGuess="";
+		$("#answerblock").html("<p>Well Done!</p>");
+		hidepicture();
 
-    $(".answerchoice").on("click", function() {
-        userGuess = parseInt($(this).attr("guessvalue"));
-            if (userGuess === pick.answer ) {
-                stop();
-                correctCount++;
-                userGuess="";
-                $("#answerblock").html("<p> Well done! </p>");
-                hidepicture();
-            } else {
-                stop();
-                incorrectCount++;
-                userGuess="";
-                $("#answerblock").html("<p> Nope! The right answer is: " + pick.choice[pick.answer] + " </p>");
-                hidepicture();
-            }
-    })
-    function hidepicture () {
-        $("#answerblock").append("<img src=" + pick.image + ">");
-        choiceArray.push(pick);
-        
-        var hidepic = setTimeout(function() {
-            $("#answerblock").empty();
-            timer= 15;
+	} else {
+		stop();
+		incorrectCount++;
+		userGuess="";
+		$("#answerblock").html("<p>Wrong! The correct answer is: " + pick.choice[pick.answer] + "</p>");
+		hidepicture();
+	}
+})
+}
 
-        if ((incorrectCount + correctCount + blankCount) === QuestionCount) {
-            $("#questionblock").empty();
-            $("#questionblock").html("<h3> Did you catch 'em all? </h3>");
-            $("#answerblock").append("<h4> Correct: " + correctCount + "</h4>");
-            $("#answerblock").append("<h4> Incorrect: " + incorrectCount + "</h4>");
-            $("#answerblock").append("<h4> Left Blank: " + blankCount + "</h4>");
-        } else {
-            startTimer();
-            showQuestion();
-        }
-        }, 3000);
-    }
+
+function hidepicture () {
+	$("#answerblock").append("<img src=" + pick.image + ">");
+	newArray.push(pick);
+	qna.splice(index,1);
+
+	var hidpic = setTimeout(function() {
+		$("#answerblock").empty();
+		timer= 20;
+
+	//run the score screen if all questions answered
+	if ((incorrectCount + correctCount + blankCount) === qCount) {
+		$("#questionblock").empty();
+		$("#questionblock").html("<h3>Game Over!  Did you catch 'em all?: </h3>");
+		$("#answerblock").append("<h4> Correct: " + correctCount + "</h4>" );
+		$("#answerblock").append("<h4> Incorrect: " + incorrectCount + "</h4>" );
+		$("#answerblock").append("<h4> Left Blank: " + blankCount + "</h4>" );
+		$("#reset").show();
+		correctCount = 0;
+		incorrectCount = 0;
+		blankCount = 0;
+
+	} else {
+		runTimer();
+		displayQuestion();
+
+	}
+	}, 3000);
+
+
+}
+
+$("#reset").on("click", function() {
+	$("#reset").hide();
+	$("#answerblock").empty();
+	$("#questionblock").empty();
+	for(var i = 0; i < holder.length; i++) {
+		qna.push(holder[i]);
+	}
+	runTimer();
+	displayQuestion();
+
+})
+
 })
 // start with Start Button page
 // when Start is clicked, questions&answers appear and timer begins

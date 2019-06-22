@@ -1,3 +1,9 @@
 * {
     text-align: center;
+    background-image: url(http://www.sonyphotog.com/photos/globalmedicalco/20/97039.jpg);
+    color: white;
 };
+
+.header {
+    font-size: 60px;
+}
