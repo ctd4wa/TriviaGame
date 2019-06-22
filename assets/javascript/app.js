@@ -8,7 +8,7 @@ $(document).ready(function(){
         },
         {
             question: "According to the National Pokédex, which Pokémon is classified as number 25?",
-            choice: ["Pidgey,", "Pikachu", "Sandshrew", "Vulpix"],
+            choice: ["Pidgey", "Pikachu", "Sandshrew", "Vulpix"],
             answer: 1,
             image: "https://media3.giphy.com/media/39GAXpLVKvYRO/giphy.gif?cid=790b76115d0ae83241474d2e63f9f3fc&rid=giphy.gif"
         },
@@ -24,7 +24,19 @@ $(document).ready(function(){
             answer: 2,
             image: "https://media.giphy.com/media/IiA6yfcjtVSsU/giphy.gif"
         },
-    ]
+        {
+            question: "The cities of the Kanto Region are named after what?",
+            choice: ["Japanese cities", "Colors", "Japanese dishes", "fish"],
+            answer: 1,
+            image: "https://media.giphy.com/media/khz8FuMbvbvdC/giphy.gif"
+        },
+        {
+            question: "What type of Pokémon take no damage from Normal-type attacks?",
+            choice:["Dark", "Psychic", "Grass", "Ghost"],
+            answer: 3,
+            image: "https://media0.giphy.com/media/DQtaF5WbB6rbG/giphy.gif"
+        },
+    ];
     var correctCount = 0;
     var incorrectCount = 0;
     var blankCount = 0;
@@ -59,10 +71,10 @@ $(document).ready(function(){
         $("#timeleft").html("<h3> You have " + timer + " seconds left!! </h3>");
         timer --;
 
-            if (timer == 0) {
+            if (timer === 0) {
                 blankCount++;
                 stop();
-                $("#answerblock").html("<p>Ruh roh! Time's up! The answer is:" + pick.choice[pick.answer] + "</p>");
+                $("#answerblock").html("<p>Ruh roh! Time's up! The answer is: " + pick.choice[pick.answer] + "</p>");
                 hidepicture();
             }
 
